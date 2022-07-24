@@ -1,0 +1,164 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Bitter', serif;
+}
+body {
+    background-color: rgb(234, 237, 235);
+}
+body .correct {
+    background-color: rgb(17, 121, 31);
+}
+
+body .wrong {
+    background-color: rgb(109, 16, 16);
+}
+
+header {
+    padding: 20px;
+    width: 100%;
+    background-color:rgb(130, 63, 169);
+    color: rgb(255, 255, 255);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h2 {
+    font-size: 36px;
+}
+
+header .timer {
+    flex-wrap: wrap;
+}
+
+.intro {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin-top: 50px;
+}
+
+.intro-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 50%;
+
+}
+
+.intro-container h3 {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+}
+
+.instruction {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 80%;
+    padding: 30px;
+    background-color: rgb(130, 63, 169);
+    margin: 30px 0;
+    border-radius: 5px;
+}
+
+.instruction p {
+    width: 100%;
+    /* text-align: center; */
+    justify-content: center;
+    line-height: 1.25;
+    color: rgb(255, 255, 255);
+}
+
+.instruction ul{
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-left: 20px;
+    margin-top: 15px;
+    color:rgb(255, 255, 255);
+}
+
+.intro-container .btn {
+    margin-top: 30px;
+    width: 100%;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 40px;
+    width: 100%;
+}
+
+form h3{
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+}
+form ul {
+    width: 50%;
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    flex-wrap: wrap;
+    margin-top: 50px;
+}
+
+form ul li {
+    padding: 5px 12px;
+    justify-content: space-between;
+    background-color: rgb(130, 63, 169);
+    border: 2px solid rgb(130, 63, 169);
+    border-radius: 2px;
+    margin: 10px 5px;
+    width: 45%;
+    font-size: 20px;
+    text-align: center;
+    color: rgb(255, 255, 255);
+}
+
+.quiz .answers .options:hover {
+    background-color: rgb(167, 113, 198);
+    border: 2px solid rgb(130, 63, 169);
+}
+.hide {
+    display: none;
+}
+
+@media screen and (max-width: 980px) {
+    .intro-container {
+        width: 80%;
+    }
+
+    .quiz .answers {
+        width: 80%;
+    }
+
+}
+
+@media screen and (max-width: 575px) {
+    
+    header h2{
+        font-size: 28px;
+    }
+    .intro-container {
+        width: 100%;
+    }
+
+    .quiz .answers {
+        width: 80%;
+    }
+
+    .quiz .answers .options {
+        width: 100%;
+        flex-wrap: wrap;
+        margin: 2px 10px;
+    }
+
+}
