@@ -1,22 +1,47 @@
 var btnEl = document.querySelector(".btn");
 var introEl = document.querySelector(".intro");
 var contentEl = document.querySelector(".content");
-var questionEl = document.querySelector(".question")
-var answersEl = document.querySelector(".answers")
+var questionEl = document.querySelector(".question");
+var answersEl = document.querySelector(".answers");
+var bodyEl = document.querySelector("body");
+var scoreEl = document.querySelector(".score")
+var timerEl = document.querySelector("#timer")
+var finalScoreEl = document.querySelector("#final-score")
+var submitBtnEl = document.querySelector(".submit-button")
 
-let randomQuestion, currentQuestionIndex
+var randomQuestion, currentQuestionIndex
+var points =0
+var time = 60
 
 btnEl.addEventListener("click", startQuiz);
 answersEl.addEventListener("click", next);
+submitBtnEl.addEventListener("click", submitScore);
+
+
 
 function next (){
     currentQuestionIndex++
-    nextQuestion()
+    if (questionObj.length-1<currentQuestionIndex){
+        showScore()
 
+    } else {
+    nextQuestion()
+    }
+}
+
+function showScore() {
+    contentEl.classList.add("hide")
+    scoreEl.classList.remove("hide")
+    finalScoreEl.classList.remove("hide")
+    timerEl.classList.add("hide")
+    points = points+Math.floor(time/2)
+    finalScoreEl.textContent = "Your final score is "+ points
+    // need to add score calculation to determine if it'll be placed within the top score
 }
 
 function startQuiz () {
     introEl.classList.add("hide");
+    countDown ()
     randomQuestion = questionObj => {
         for (var i = questionObj.length-1; i >0; i--) {
             var rand = Math.floor(Math.random() * i);
@@ -28,10 +53,30 @@ function startQuiz () {
     }
     // console.log(randomQuestion(questionObj))
     currentQuestionIndex = 0;
+
     contentEl.classList.remove("hide");
     nextQuestion();
 }
 
+function countDown(){
+    timerEl.textContent=time
+    var timeInterval = setInterval(function(){
+        if(time>0){
+            time--
+            timerEl.textContent = time
+        }
+        else if (questionObj.length-1<currentQuestionIndex){
+            clearInterval(timeInterval)
+            showScore()
+        }
+        else{
+            clearInterval(timeInterval)
+            showScore()
+        }
+        
+    },1000)
+
+}
 
 function nextQuestion () {
     // resetChoices()
@@ -67,13 +112,17 @@ function selectAnswers (event) {
     var selectedAnswer = event.target
     var checkAnswer = selectedAnswer.dataset.correct
     if (checkAnswer === "correct"){
-        selectedAnswer.classList.add("correct")
+        points = points + 5
     } else {
-        selectedAnswer.classList.add("wrong")
+        time= time -10
     }
+    console.log(points)
 }
 
-
+function submitScore (event) {
+    var submitPoint = event.target
+    
+}
 
 var questionObj = [
     {

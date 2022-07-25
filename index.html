@@ -9,9 +9,9 @@
     <title>Code Quiz</title>
 </head>
 <body>
-    <header class="score">
+    <header class="leaderboard">
         <h2>View Leader board</h2>
-        <p id="timer">time</p>
+        <p id="timer"></p>
     </header>
 
     <section class="intro">
@@ -43,6 +43,12 @@
         </form>
     </main>
 
+    <section class="score hide">
+        <p id="final-score" class="hide"></p>
+        <p id="highscore" class="hide"></p>
+        <input class="enter-score" name= "enter-name" type="text" placeholder="Enter your name">
+        <button class="submit-btn">Submit</button>
+    </section>
     <footer></footer>
     <script src="./assets/js/script.js"></script>
 </body>
