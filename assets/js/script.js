@@ -7,20 +7,13 @@ var answersEl = document.querySelector(".answers")
 let randomQuestion, currentQuestionIndex
 
 btnEl.addEventListener("click", startQuiz);
+answersEl.addEventListener("click", next);
 
-// var randomQuestion = []
-// randomQuestion = questionObj=>{
-//     for (var i = questionObj.length-1; i >0; i--) {
-//         var rand = Math.floor(Math.random() * i);
-//         var curr = questionObj[i];
-//         questionObj[i] = questionObj[rand];
-//         questionObj[rand] = curr;
-//     }
-//     return questionObj;
-// }
-// var currentQuestion =0
+function next (){
+    currentQuestionIndex++
+    nextQuestion()
 
-
+}
 
 function startQuiz () {
     introEl.classList.add("hide");
@@ -41,25 +34,43 @@ function startQuiz () {
 
 
 function nextQuestion () {
+    // resetChoices()
     displayedQuestion(randomQuestion(questionObj)[currentQuestionIndex])
 }
 
 function displayedQuestion(questionObj){
-    questionEl.textContent= questionObj.question
+    questionEl.textContent = questionObj.question
+    while (answersEl.firstChild) {
+        answersEl.removeChild(answersEl.firstChild)
+    }
     for (var i =0; i<4; i++) {
         var option = document.createElement("li")
         option.textContent = questionObj.answers[i].options
         console.log(option)
         option.classList.add("options")
-        option.addEventListener("click", selectAnswers)
         answersEl.appendChild(option)
+        if (questionObj.answers[i].correct === true) {
+            option.dataset.correct = "correct"
+        }
+        option.addEventListener("click", selectAnswers)
     }
     // answersEl.textContent= questionObj.options
-
 }
 
-function selectAnswers (e) {
+// function resetChoices (){
+//     while (answersEl.firstChild) {
+//         answersEl.removeChild(answersEl.firstChild)
+//     }
+// }
 
+function selectAnswers (event) {
+    var selectedAnswer = event.target
+    var checkAnswer = selectedAnswer.dataset.correct
+    if (checkAnswer === "correct"){
+        selectedAnswer.classList.add("correct")
+    } else {
+        selectedAnswer.classList.add("wrong")
+    }
 }
 
 
