@@ -7,38 +7,40 @@ var bodyEl = document.querySelector("body");
 var scoreEl = document.querySelector(".score")
 var timerEl = document.querySelector("#timer")
 var finalScoreEl = document.querySelector("#final-score")
-var submitBtnEl = document.querySelector(".submit-button")
+var submitBtnEl = document.querySelector(".submit-btn")
+var inputNameEl = document.querySelector(".enter-score")
 
 var randomQuestion, currentQuestionIndex
-var points =0
+var points = 0
 var time = 60
-
-btnEl.addEventListener("click", startQuiz);
-answersEl.addEventListener("click", next);
-submitBtnEl.addEventListener("click", submitScore);
+var user = []
 
 
 
+
+// determines what is next once a question is answered
 function next (){
     currentQuestionIndex++
     if (questionObj.length-1<currentQuestionIndex){
         showScore()
-
-    } else {
-    nextQuestion()
     }
+    if (!questionObj.question){
+        return "quiz is over"
+    }
+    nextQuestion()
 }
 
+// will present the final score after answering all the questions or when the time runs out
 function showScore() {
     contentEl.classList.add("hide")
     scoreEl.classList.remove("hide")
     finalScoreEl.classList.remove("hide")
-    timerEl.classList.add("hide")
+    // timerEl.classList.add("hide")
     points = points+Math.floor(time/2)
     finalScoreEl.textContent = "Your final score is "+ points
-    // need to add score calculation to determine if it'll be placed within the top score
-}
+    };
 
+// will triger the start of the quiz
 function startQuiz () {
     introEl.classList.add("hide");
     countDown ()
@@ -58,31 +60,33 @@ function startQuiz () {
     nextQuestion();
 }
 
+// tracks how much time is left for the quiz
 function countDown(){
     timerEl.textContent=time
     var timeInterval = setInterval(function(){
-        if(time>0){
+        if(time >= 0){
             time--
             timerEl.textContent = time
         }
-        else if (questionObj.length-1<currentQuestionIndex){
-            clearInterval(timeInterval)
+
+        else if (questionObj.length-1 < currentQuestionIndex){
             showScore()
         }
         else{
-            clearInterval(timeInterval)
             showScore()
         }
         
     },1000)
-
+    clearInterval(timeInterval)
 }
 
+// determine what the next question is
 function nextQuestion () {
     // resetChoices()
     displayedQuestion(randomQuestion(questionObj)[currentQuestionIndex])
 }
 
+// present the current question
 function displayedQuestion(questionObj){
     questionEl.textContent = questionObj.question
     while (answersEl.firstChild) {
@@ -91,7 +95,6 @@ function displayedQuestion(questionObj){
     for (var i =0; i<4; i++) {
         var option = document.createElement("li")
         option.textContent = questionObj.answers[i].options
-        console.log(option)
         option.classList.add("options")
         answersEl.appendChild(option)
         if (questionObj.answers[i].correct === true) {
@@ -99,6 +102,7 @@ function displayedQuestion(questionObj){
         }
         option.addEventListener("click", selectAnswers)
     }
+    
     // answersEl.textContent= questionObj.options
 }
 
@@ -108,6 +112,12 @@ function displayedQuestion(questionObj){
 //     }
 // }
 
+// element.setAttribute('class', 'className');
+//   setTimeout(function () {
+//     feedbackEl.setAttribute('class', 'hide');
+//   }, 5000);
+
+// will track which answer the user have selected and points are added
 function selectAnswers (event) {
     var selectedAnswer = event.target
     var checkAnswer = selectedAnswer.dataset.correct
@@ -116,14 +126,25 @@ function selectAnswers (event) {
     } else {
         time= time -10
     }
-    console.log(points)
 }
 
-function submitScore (event) {
-    var submitPoint = event.target
-    
-}
+function score1(event) {
+    console.log(inputNameEl.name)
+    event.preventDefault()
+    // var currScore = JSON.parse(localStorage.getItem("user"))
+    // if (currScore)
+        var score = {
+            name: inputNameEl.value.trim(),
+            points
+        }
+    user.push(score)
+    console.log(user)
+    localStorage.setItem("user", JSON.stringify(user))
+    leaderBoard()
+    } 
 
+function leaderBoard()
+// question the quiz will filter through
 var questionObj = [
     {
         question:"Inside which HTML element do we put the JavaScript?",
@@ -162,3 +183,7 @@ var questionObj = [
        ]
     }
 ]
+
+btnEl.addEventListener("click", startQuiz);
+answersEl.addEventListener("click", next);
+submitBtnEl.onclick = score1
