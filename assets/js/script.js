@@ -176,43 +176,11 @@ function leaderBoard(){
         console.log(leaderBoardListEl)
         leaderListEl.appendChild(leaderBoardListEl)
     }
-    sort()
     scoreEl.classList.add("hide")
     leaderBoardEl.classList.remove("hide")
 }
 
-function sort () {
-        var leaderListEl, run, li, stop;
 
-        // Taking content of list as input
-        leaderListEl = document.querySelector(".leader-list");
-
-        run = true;
-
-        while (run) {
-            run = false;
-            li = leaderListEl.getElementsByTagName("LI");
-
-            // Loop traversing through all the list items
-            for ( var i = 0; i < (li.length - 1); i++) {
-                stop = false;
-                if (li[i].points > li[i+1].points) {
-                    stop = true;
-                    break;
-                }
-            }
-
-            /* If the current item is smaller than 
-               the next item then adding it after 
-               it using insertBefore() method */
-            if (stop) {
-                li[i].parentNode.insertBefore(
-                        li[i + 1], li[i]);
-
-                run = true;
-            }
-        }
-    }
 
 // question the quiz will filter through
 var questionObj = [
