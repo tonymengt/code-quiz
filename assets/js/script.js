@@ -9,25 +9,43 @@ var timerEl = document.querySelector("#timer")
 var finalScoreEl = document.querySelector("#final-score")
 var submitBtnEl = document.querySelector(".submit-btn")
 var inputNameEl = document.querySelector(".enter-score")
+var leaderEl = document.querySelector(".leader")
+var leaderBoardEl = document.querySelector(".leaderboard")
+var leaderListEl = document.querySelector(".leader-list")
+var playAgainEl = document.querySelector(".play-again")
+var homeMenuEl = document.querySelector(".home-menu")
 
-var randomQuestion, currentQuestionIndex
+var randomQuestion = questionObj => {
+    for (var i = questionObj.length-1; i >0; i--) {
+        var rand = Math.floor(Math.random() * i);
+        var curr = questionObj[i];
+        questionObj[i] = questionObj[rand];
+        questionObj[rand] = curr;
+    }
+    return questionObj;
+}
+
+var currentQuestionIndex
 var points = 0
 var time = 60
 var user = []
-
+var timeInterval = null
 
 
 
 // determines what is next once a question is answered
 function next (){
+    console.log("hi")
     currentQuestionIndex++
     if (questionObj.length-1<currentQuestionIndex){
+        // clearInterval(timeInterval)
         showScore()
-    }
-    if (!questionObj.question){
-        return "quiz is over"
-    }
-    nextQuestion()
+    }else {displayedQuestion()}
+    // nextQuestion()
+    // if (!questionObj.question){
+    //     return "quiz is over"
+    // }
+    
 }
 
 // will present the final score after answering all the questions or when the time runs out
@@ -35,69 +53,73 @@ function showScore() {
     contentEl.classList.add("hide")
     scoreEl.classList.remove("hide")
     finalScoreEl.classList.remove("hide")
+    timerEl.classList.add("hide")
     // timerEl.classList.add("hide")
+    
     points = points+Math.floor(time/2)
+    clearInterval(timeInterval)
     finalScoreEl.textContent = "Your final score is "+ points
     };
 
+   
+
 // will triger the start of the quiz
 function startQuiz () {
+    questionObj = randomQuestion(questionObj)
     introEl.classList.add("hide");
+    leaderBoardEl.classList.add("hide");
     countDown ()
-    randomQuestion = questionObj => {
-        for (var i = questionObj.length-1; i >0; i--) {
-            var rand = Math.floor(Math.random() * i);
-            var curr = questionObj[i];
-            questionObj[i] = questionObj[rand];
-            questionObj[rand] = curr;
-        }
-        return questionObj;
-    }
     // console.log(randomQuestion(questionObj))
     currentQuestionIndex = 0;
-
+    time = 60;
+    points = 0;
     contentEl.classList.remove("hide");
-    nextQuestion();
+    displayedQuestion()
+    // nextQuestion();
 }
 
 // tracks how much time is left for the quiz
 function countDown(){
     timerEl.textContent=time
-    var timeInterval = setInterval(function(){
+    timeInterval = setInterval(function(){
         if(time >= 0){
             time--
             timerEl.textContent = time
         }
-
-        else if (questionObj.length-1 < currentQuestionIndex){
-            showScore()
-        }
+        // else if (questionObj.length-1 < currentQuestionIndex){
+        //     clearInterval(timeInterval)
+        //     showScore()
+        // }
         else{
+            clearInterval(timeInterval)
             showScore()
         }
-        
+
     },1000)
-    clearInterval(timeInterval)
+    
 }
 
-// determine what the next question is
-function nextQuestion () {
-    // resetChoices()
-    displayedQuestion(randomQuestion(questionObj)[currentQuestionIndex])
-}
+// // determine what the next question is
+// function nextQuestion () {
+//     // resetChoices()
+//     displayedQuestion()
+//     // randomQuestion[currentQuestionIndex]
+//     console.log(currentQuestionIndex)
+// }
 
 // present the current question
-function displayedQuestion(questionObj){
-    questionEl.textContent = questionObj.question
+function displayedQuestion(){
+
+    questionEl.textContent = questionObj[currentQuestionIndex].question
     while (answersEl.firstChild) {
         answersEl.removeChild(answersEl.firstChild)
     }
     for (var i =0; i<4; i++) {
         var option = document.createElement("li")
-        option.textContent = questionObj.answers[i].options
+        option.textContent = questionObj[currentQuestionIndex].answers[i].options
         option.classList.add("options")
         answersEl.appendChild(option)
-        if (questionObj.answers[i].correct === true) {
+        if (questionObj[currentQuestionIndex].answers[i].correct === true) {
             option.dataset.correct = "correct"
         }
         option.addEventListener("click", selectAnswers)
@@ -128,7 +150,7 @@ function selectAnswers (event) {
     }
 }
 
-function score1(event) {
+function score(event) {
     console.log(inputNameEl.name)
     event.preventDefault()
     // var currScore = JSON.parse(localStorage.getItem("user"))
@@ -138,12 +160,60 @@ function score1(event) {
             points
         }
     user.push(score)
-    console.log(user)
     localStorage.setItem("user", JSON.stringify(user))
+
     leaderBoard()
     } 
 
-function leaderBoard()
+function leaderBoard(){
+    var currScore = JSON.parse(localStorage.getItem("user"))
+    var leaderBoardListEl = document.createElement("li")
+    leaderBoardListEl.className = "leader-board-list"
+    leaderBoardListEl.remove()
+    // console.log(currScore)
+    for (var i = 0; i < currScore.length; i++){
+        leaderBoardListEl.innerHTML = "<li>" + currScore[i].name +": "+ currScore[i].points +"</li>"
+        console.log(leaderBoardListEl)
+        leaderListEl.appendChild(leaderBoardListEl)
+    }
+    sort()
+    scoreEl.classList.add("hide")
+    leaderBoardEl.classList.remove("hide")
+}
+
+function sort () {
+        var leaderListEl, run, li, stop;
+
+        // Taking content of list as input
+        leaderListEl = document.querySelector(".leader-list");
+
+        run = true;
+
+        while (run) {
+            run = false;
+            li = leaderListEl.getElementsByTagName("LI");
+
+            // Loop traversing through all the list items
+            for ( var i = 0; i < (li.length - 1); i++) {
+                stop = false;
+                if (li[i].points > li[i+1].points) {
+                    stop = true;
+                    break;
+                }
+            }
+
+            /* If the current item is smaller than 
+               the next item then adding it after 
+               it using insertBefore() method */
+            if (stop) {
+                li[i].parentNode.insertBefore(
+                        li[i + 1], li[i]);
+
+                run = true;
+            }
+        }
+    }
+
 // question the quiz will filter through
 var questionObj = [
     {
@@ -186,4 +256,9 @@ var questionObj = [
 
 btnEl.addEventListener("click", startQuiz);
 answersEl.addEventListener("click", next);
-submitBtnEl.onclick = score1
+submitBtnEl.addEventListener("click", score);
+playAgainEl.addEventListener("click", startQuiz);
+homeMenuEl.addEventListener("click", function (){
+    leaderBoardEl.classList.add("hide")
+    introEl.classList.remove("hide")
+})
