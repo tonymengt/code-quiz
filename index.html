@@ -40,22 +40,29 @@
                 <li class="options">tes</li>
                 <li class="options">tes</li>
             </ul>
+            <p class="solution hide"></p>
         </form>
     </main>
 
     <section class="score hide">
         <p id="final-score" class="hide"></p>
-        <p id="highscore" class="hide"></p>
+        <!-- <p id="highscore" class="hide"></p> -->
         <input class="enter-score" name= "enter-name" type="text" placeholder="Enter your name">
         <button class="submit-btn">Submit</button>
+        <p class="check-answer hide"></p>
     </section>
 
     <section class="leaderboard hide">
-        <ul class="leader-list">
-            <!-- <li class="leader-board-list"></li> -->
-        </ul>
-        <button class="play-again">Play Again</button>
-        <button class="home-menu">Home Menu</button>
+        <div class="leader-container">
+            <h2 class="leader-title">Leaderboard</h2>
+            <ol class="leader-list">
+                <li class="leader-board-list"></li>
+            </ol>
+        <div class="leader-btn-container">
+            <button class="play-again">Play Again</button>
+            <button class="home-menu">Home Menu</button>
+        </div>
+        </div> 
     </section>
 
     <footer></footer>

@@ -4,15 +4,15 @@
     box-sizing: border-box;
     font-family: 'Bitter', serif;
 }
-body {
+body, .none {
     background-color: rgb(234, 237, 235);
 }
-body .correct {
-    background-color: rgb(17, 121, 31);
+.correct {
+    background-color: rgb(34, 171, 52);
 }
 
-body .wrong {
-    background-color: rgb(109, 16, 16);
+.wrong {
+    background-color: rgb(151, 34, 34);
 }
 
 header {
@@ -27,6 +27,12 @@ header {
 
 header h2 {
     font-size: 36px;
+}
+header h2:hover {
+    border-radius: 3px;
+    background-color: rgb(255, 255, 255);
+    color: rgb(130, 63, 169);
+    cursor: pointer;
 }
 
 header .timer {
@@ -97,7 +103,7 @@ form {
 }
 
 form h3{
-    width: 100%;
+    width: 60%;
     text-align: center;
     font-size: 30px;
 }
@@ -112,21 +118,124 @@ form ul {
 
 form ul li {
     padding: 5px 12px;
+    position: relative;
     justify-content: space-between;
     background-color: rgb(130, 63, 169);
-    border: 2px solid rgb(130, 63, 169);
-    border-radius: 2px;
+    border-radius: 4px;
     margin: 10px 5px;
     width: 45%;
     font-size: 20px;
     text-align: center;
     color: rgb(255, 255, 255);
+    top: -3px;
+    box-shadow: 0 3px #333;
 }
 
 .quiz .answers .options:hover {
     background-color: rgb(167, 113, 198);
-    border: 2px solid rgb(130, 63, 169);
+    top: -2px;
+    box-shadow: 0 2px #333;
+    cursor: pointer;
 }
+
+.quiz .answers .options:active {
+    box-shadow: 0 0px #333;
+    top: 0;
+  }
+
+.quiz .solution {
+    font-size: 40px;
+    color: rgb(255,255,255);
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+}
+
+.score {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px
+}
+
+#final-score {
+    font-size: 36px;
+    color: black;
+    width: 100%;
+    text-align: center;
+}
+
+.score .check-answer {
+    width: 100%;
+    text-align: center;
+    margin-top: 65px;
+    font-size: 36px ;
+}
+
+.leaderboard {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+}
+.leader-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 40%;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: rgb(130, 63, 169);
+    margin-top: 30px;
+    border-radius: 4px;
+}
+
+.leader-title {
+    width: 100%;
+    text-align: center;
+    color: rgb(255, 255, 255);
+    margin-top: 15px;
+    text-decoration: underline;
+}
+
+.leader-container .leader-list {
+    width: 70%;
+    flex-wrap: wrap;
+    align-items: top;
+    margin-top: 5px;
+    padding: 15px;
+    border-radius: 4px;
+    color: rgb(255, 255, 255);
+    justify-content: center;
+
+}
+
+.leader-board-list {
+    display: flex;
+    display: list-item;
+    list-style-position: inside;
+    flex-wrap: wrap;
+    padding: 2px;
+    margin: 2px;
+    width: 100%;
+    justify-content: center;
+    color: rgb(0,0,0);
+    background-color: rgb(255, 255, 255);
+}
+
+.leader-btn-container { 
+    display: flex;
+    flex-wrap: wrap;
+    width: 60%;
+    justify-content: space-around;
+}
+
+.play-again, .home-menu {
+    width: 50%;
+    margin-bottom: 10px;
+}
+
 .hide {
     display: none;
 }

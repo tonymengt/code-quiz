@@ -14,6 +14,9 @@ var leaderBoardEl = document.querySelector(".leaderboard")
 var leaderListEl = document.querySelector(".leader-list")
 var playAgainEl = document.querySelector(".play-again")
 var homeMenuEl = document.querySelector(".home-menu")
+var leaderBoardListEl = document.querySelector(".leader-board-list")
+var solutionEl = document.querySelector(".solution")
+var navEl = document.querySelector(".navigation")
 
 var randomQuestion = questionObj => {
     for (var i = questionObj.length-1; i >0; i--) {
@@ -35,61 +38,58 @@ var timeInterval = null
 
 // determines what is next once a question is answered
 function next (){
-    console.log("hi")
     currentQuestionIndex++
     if (questionObj.length-1<currentQuestionIndex){
-        // clearInterval(timeInterval)
         showScore()
     }else {displayedQuestion()}
-    // nextQuestion()
-    // if (!questionObj.question){
-    //     return "quiz is over"
-    // }
-    
 }
 
 // will present the final score after answering all the questions or when the time runs out
 function showScore() {
+    document.querySelector(".enter-score").value =""
+    document.querySelector(".check-answer").classList.remove("hide")
     contentEl.classList.add("hide")
     scoreEl.classList.remove("hide")
     finalScoreEl.classList.remove("hide")
     timerEl.classList.add("hide")
-    // timerEl.classList.add("hide")
-    
+    if (checkAnswer === "correct"){
+        document.querySelector(".check-answer").textContent = "Correct"
+        document.querySelector(".check-answer").style.color = "rgb(34, 171, 52)"
+    } else {
+        document.querySelector(".check-answer").textContent = "Wrong"
+        document.querySelector(".check-answer").style.color = "rgb(151, 34, 34)"
+    }
     points = points+Math.floor(time/2)
     clearInterval(timeInterval)
-    finalScoreEl.textContent = "Your final score is "+ points
+    finalScoreEl.textContent = "Your final score is "+ points + "."
     };
 
    
 
 // will triger the start of the quiz
 function startQuiz () {
+    solutionEl.textContent= ""
     questionObj = randomQuestion(questionObj)
+    navEl.classList.remove("hide")
     introEl.classList.add("hide");
     leaderBoardEl.classList.add("hide");
+    timerEl.classList.remove("hide")
     countDown ()
-    // console.log(randomQuestion(questionObj))
     currentQuestionIndex = 0;
     time = 60;
     points = 0;
     contentEl.classList.remove("hide");
     displayedQuestion()
-    // nextQuestion();
 }
 
 // tracks how much time is left for the quiz
 function countDown(){
     timerEl.textContent=time
     timeInterval = setInterval(function(){
-        if(time >= 0){
+        if(time > 0){
             time--
             timerEl.textContent = time
         }
-        // else if (questionObj.length-1 < currentQuestionIndex){
-        //     clearInterval(timeInterval)
-        //     showScore()
-        // }
         else{
             clearInterval(timeInterval)
             showScore()
@@ -99,17 +99,8 @@ function countDown(){
     
 }
 
-// // determine what the next question is
-// function nextQuestion () {
-//     // resetChoices()
-//     displayedQuestion()
-//     // randomQuestion[currentQuestionIndex]
-//     console.log(currentQuestionIndex)
-// }
-
 // present the current question
 function displayedQuestion(){
-
     questionEl.textContent = questionObj[currentQuestionIndex].question
     while (answersEl.firstChild) {
         answersEl.removeChild(answersEl.firstChild)
@@ -124,63 +115,72 @@ function displayedQuestion(){
         }
         option.addEventListener("click", selectAnswers)
     }
-    
-    // answersEl.textContent= questionObj.options
 }
 
-// function resetChoices (){
-//     while (answersEl.firstChild) {
-//         answersEl.removeChild(answersEl.firstChild)
-//     }
-// }
-
-// element.setAttribute('class', 'className');
-//   setTimeout(function () {
-//     feedbackEl.setAttribute('class', 'hide');
-//   }, 5000);
-
+var checkAnswer=null
 // will track which answer the user have selected and points are added
 function selectAnswers (event) {
+    bodyEl.className = ""
+    solutionEl.textContent= ""
+    
     var selectedAnswer = event.target
-    var checkAnswer = selectedAnswer.dataset.correct
+    checkAnswer = selectedAnswer.dataset.correct
+    solutionEl.classList.remove("hide")
     if (checkAnswer === "correct"){
         points = points + 5
+        time += 5
+        solutionEl.textContent= "Correct"
+        solutionEl.style.color = 'rgb(34, 171, 52)'
+        // var answerInterval = setInterval (function (){
+        //     var clock = 0.5
+        //     bodyEl.className = ""
+        //     solutionEl.textContent= ""
+        //     clock--
+        // },500)
     } else {
         time= time -10
+        solutionEl.textContent= "Wrong"
+        solutionEl.style.color = "rgb(151, 34, 34)"
+        // var answerInterval = setInterval (function (){
+        //     var clock = 0.5
+        //     bodyEl.className = ""
+        //     solutionEl.textContent= ""
+        //     clock--
+        // },500)
     }
 }
 
+// request player to store score to localStorage
 function score(event) {
-    console.log(inputNameEl.name)
     event.preventDefault()
-    // var currScore = JSON.parse(localStorage.getItem("user"))
-    // if (currScore)
         var score = {
             name: inputNameEl.value.trim(),
             points
         }
     user.push(score)
-    localStorage.setItem("user", JSON.stringify(user))
-
+    user.sort(function(a,b){
+        return b.points - a.points
+    })
+    localStorage.setItem("user-score", JSON.stringify(user))
     leaderBoard()
     } 
 
+    // display data from localStorage
 function leaderBoard(){
-    var currScore = JSON.parse(localStorage.getItem("user"))
-    var leaderBoardListEl = document.createElement("li")
-    leaderBoardListEl.className = "leader-board-list"
-    leaderBoardListEl.remove()
-    // console.log(currScore)
+    navEl.classList.add("hide")
+    var currScore = JSON.parse(localStorage.getItem("user-score"))
+    leaderListEl.innerHTML=""
+    console.log(currScore)
+    if (currScore==null){
+        leaderListEl.innerHTML="<li class ='leader-board-list'> </li>"
+    }else {
     for (var i = 0; i < currScore.length; i++){
-        leaderBoardListEl.innerHTML = "<li>" + currScore[i].name +": "+ currScore[i].points +"</li>"
-        console.log(leaderBoardListEl)
-        leaderListEl.appendChild(leaderBoardListEl)
-    }
+        leaderListEl.innerHTML += "<li class ='leader-board-list'>" + currScore[i].name +": "+ currScore[i].points +"</li>"
+    }}
     scoreEl.classList.add("hide")
     leaderBoardEl.classList.remove("hide")
+    introEl.classList.add("hide")
 }
-
-
 
 // question the quiz will filter through
 var questionObj = [
@@ -194,21 +194,21 @@ var questionObj = [
        ]
     },
     {
-        question:"tes2?",
+        question:"How to write an IF statement in JavaScript?",
         answers: [
-            {options:"<js>", correct: false},
-            {options:"<script>", correct: true},
-            {options:"<scripting>", correct: false},
-            {options:"<javascript>", correct: false}
+            {options:"if i=5 then", correct: false},
+            {options:"if i=5", correct: false},
+            {options:"if i ==5 then", correct: false},
+            {options:"if (i==5)", correct: true}
        ]
     },
     {
-        question:"Inside whicipt?",
+        question:"How does a FOR loop start?",
         answers: [
-            {options:"<js>", correct: false},
-            {options:"<script>", correct: true},
-            {options:"<scripting>", correct: false},
-            {options:"<javascript>", correct: false}
+            {options:"for (i=0; i<=5)", correct: false},
+            {options:"for i=1 to 5", correct: false},
+            {options:"for (i=0; i<=5; i++", correct: true},
+            {options:"for (i=0; i<=5; i+", correct: false}
        ]
     },
     {
@@ -219,6 +219,60 @@ var questionObj = [
             {options:"After the <style>", correct: false},
             {options:"None of the above", correct: false}
        ]
+    },
+    {
+        question:"Which event occurs when the user clicks on an HTML element?",
+        answers: [
+            {options:"onclick", correct: true},
+            {options:"onmouseover", correct: false},
+            {options:"onmouseclick", correct: false},
+            {options:"onchange", correct: false}
+       ]
+    },
+    {
+        question:"Which operator is used to assign a value to a variable?",
+        answers: [
+            {options:"-", correct: false},
+            {options:"*", correct: false},
+            {options:"X", correct: false},
+            {options:"=", correct: true}
+       ]
+    },
+    {
+        question:"What will the following code return: Boolean(10 > 9)",
+        answers: [
+            {options:"true", correct: true},
+            {options:"false", correct: false},
+            {options:"NaN", correct: false},
+            {options:"undefined", correct: false}
+       ]
+    },
+    {
+        question:"In the JavaScript, which one of the following is not considered as an error:",
+        answers: [
+            {options:"Missing of semicolons", correct: true},
+            {options:"Syntax error", correct: false},
+            {options:"Division by zero", correct: false},
+            {options:"Missing of bracket", correct: false}
+       ]
+    },
+    {
+        question:"How to write an IF statement for executing some code if 'i' is NOT equal to 5?",
+        answers: [
+            {options:"if (i <> 5)", correct: false},
+            {options:"if (i NOT 5)", correct: false},
+            {options:"if (i != 5)", correct: true},
+            {options:"if (i =! 5)", correct: false}
+       ]
+    },
+    {
+        question:"How do you write 'Hello World' in an alert box?",
+        answers: [
+            {options:"msgBox('Hello World')", correct: false},
+            {options:"alert('Hello world')", correct: false},
+            {options:"alertBox('hellow World')", correct: false},
+            {options:"alert('Hello World')", correct: true}
+       ]
     }
 ]
 
@@ -228,5 +282,11 @@ submitBtnEl.addEventListener("click", score);
 playAgainEl.addEventListener("click", startQuiz);
 homeMenuEl.addEventListener("click", function (){
     leaderBoardEl.classList.add("hide")
+    navEl.classList.remove("hide")
     introEl.classList.remove("hide")
+})
+navEl.addEventListener("click", function (){
+    clearInterval(timeInterval)
+    contentEl.classList.add("hide")
+    leaderBoard()
 })
