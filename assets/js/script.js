@@ -207,8 +207,8 @@ var questionObj = [
         answers: [
             {options:"for (i=0; i<=5)", correct: false},
             {options:"for i=1 to 5", correct: false},
-            {options:"for (i=0; i<=5; i++", correct: true},
-            {options:"for (i=0; i<=5; i+", correct: false}
+            {options:"for (i=0; i<=5; i++)", correct: true},
+            {options:"for (i=0; i<=5; i+)", correct: false}
        ]
     },
     {
