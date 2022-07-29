@@ -138,7 +138,7 @@ function selectAnswers (event) {
         //     clock--
         // },500)
     } else {
-        time= time -10
+        time= time -5
         solutionEl.textContent= "Wrong"
         solutionEl.style.color = "rgb(151, 34, 34)"
         // var answerInterval = setInterval (function (){
